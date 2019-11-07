@@ -1,0 +1,235 @@
+syntax="proto3";
+option java_package = "com.bootapp.core.grpc";
+import "google/protobuf/wrappers.proto";
+package core;
+
+//===================================== Common Types
+enum EntityStatus {
+    ENTITY_STATUS_NULL = 0;
+    ENTITY_STATUS_NORMAL = 1;
+    ENTITY_STATUS_DELETED = 2;
+    ENTITY_STATUS_INACTIVATED = 3;
+    ENTITY_STATUS_DEPRECATED = 4;
+
+    ENTITY_STATUS_SUBMITTED = 5;
+    ENTITY_STATUS_PROCESSING = 6;
+    ENTITY_STATUS_DONE = 7;
+}
+enum Language {
+    LANG_NULL = 0;
+    LANG_ZH_CN = 1;
+}
+enum Country {
+    COUNTRY_NULL = 0;
+    COUNTRY_CHINA = 1;
+}
+enum AuthType {
+    AUTH_TYPE_NULL = 0;
+    AUTH_TYPE_READ = 1;
+    AUTH_TYPE_WRITE = 2;
+}
+enum UpdateType {
+    UPDATE_TYPE_NULL = 0;
+    UPDATE_TYPE_REPLACE = 1;
+    UPDATE_TYPE_APPEND = 2;
+}
+enum SortType {
+    SORT_TYPE_NULL = 0;
+    SORT_TYPE_TIME_ASC = 1;
+    SORT_TYPE_TIME_DESC = 2;
+    SORT_TYPE_ID_ASC = 3;
+    SORT_TYPE_ID_DESC = 4;
+}
+message Pagination {
+    int64 idx = 1; // = page or offset according to specific method
+    int64 size = 2;
+    SortType sort = 3;
+    int64 total = 4;
+
+}
+message AuthorizedPaginationReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    Pagination pagination = 3;
+}
+message IdQueryReq {
+    int64 id = 1;
+}
+message AuthorizedIdQueryReq {
+    int64 id = 1;
+    int64 user_id = 2;
+    int64 org_id = 3;
+}
+message PaginatedIdQueryReq {
+    int64 id = 1;
+    Pagination pagination = 2;
+}
+message PaginatedIdsQueryReq {
+    repeated int64 ids = 1;
+    Pagination pagination = 2;
+}
+message IdsQueryReq {
+    repeated int64 ids = 1;
+}
+message AuthorizedIdsQueryReq {
+    repeated int64 ids = 1;
+    int64 user_id = 2;
+    int64 org_id = 3;
+}
+message StringQueryReq {
+    string query = 1;
+    Pagination pagination = 2;
+}
+message AuthorizedStringQueryReq {
+    string query = 1;
+    int64 user_id = 2;
+    int64 org_id = 3;
+    Pagination pagination = 4;
+}
+message Empty {}
+
+message StringsResp {
+    repeated string data = 1;
+}
+
+// =========================================== User
+message User {
+    int64 id = 1;
+    int64 org_id = 2;
+    EntityStatus status = 3;
+    google.protobuf.StringValue phone = 4;
+    google.protobuf.StringValue email = 5;
+    google.protobuf.StringValue username = 6;
+    google.protobuf.StringValue password = 7;
+    google.protobuf.StringValue name = 8;
+    int64 create_at = 9;
+    int64 update_at = 10;
+}
+message OrgWithAuthorities {
+    int64 id = 1;
+    string name = 2;
+    string authority_groups =3;
+    string authorities = 4;
+}
+message UserWithOrgAuth {
+    User user = 1;
+    repeated OrgWithAuthorities org_info = 2;
+}
+message UserWithOrgInfo {
+    User user = 1;
+    repeated Organization orgs = 2;
+}
+message UsersResp {
+    repeated User data = 1;
+    Pagination pagination = 2;
+}
+// =========================================== Org
+message Organization {
+    int64 id = 1;
+    string code = 2;
+    int64 org_role_id = 3;
+    string name = 4;
+    EntityStatus status = 5;
+    int64 create_at = 6;
+    int64 update_at = 7;
+}
+message OrganizationEdit {
+    int64 id = 1;
+    google.protobuf.StringValue code = 2;
+    google.protobuf.Int64Value org_role_id = 3;
+    google.protobuf.StringValue name = 4;
+    EntityStatus status = 5;
+}
+message OrgsResp {
+    repeated Organization data = 1;
+    Pagination pagination = 2;
+}
+// =========================================== Message
+enum MessageType {
+    MESSAGE_TYPE_NULL = 0;
+    MESSAGE_TYPE_ORG = 1;
+    MESSAGE_TYPE_USER = 2;
+}
+enum ReceiveType {
+    RECEIVE_TYPE_NULL = 0;
+    RECEIVE_TYPE_SITE = 1;
+    RECEIVE_TYPE_EMAIL = 2; //reserved
+    RECEIVE_TYPE_SMS = 3; //reserved
+}
+message Message {
+    int64 id = 1;
+    MessageType type = 2;
+    ReceiveType receive_type = 3;
+    int64 org_id = 4;
+    int64 user_id = 5;
+    int64 to = 6;
+    google.protobuf.StringValue title = 7;
+    google.protobuf.StringValue content = 8;
+    google.protobuf.StringValue files = 9;
+
+    EntityStatus status = 10;
+    int64 create_at = 11;
+    int64 update_at = 12;
+
+    google.protobuf.StringValue contact_info = 20;
+}
+message MessageResp {
+    repeated Message data = 1;
+    Pagination pagination = 2;
+}
+
+
+// ========================================== Relations
+enum RelationType {
+    RELATION_NULL = 0;
+    RELATION_ORG_USER_PARTNER_SUPPLIER = 1;
+    RELATION_ORG_USER_PARTNER_LOGISTICS = 2;
+}
+message Relation {
+    int64 id = 1;
+    int64 source_id = 2;
+    int64 target_id = 3;
+    RelationType type = 4;
+    int64 attached_id1 = 5;
+    int64 attached_id2 = 6;
+    google.protobuf.StringValue value1 = 7;
+    google.protobuf.StringValue value2 = 8;
+    EntityStatus status = 9;
+    int64 create_at = 10;
+    int64 update_at = 11;
+}
+message RelationsResp {
+    repeated Relation relations = 1;
+    Pagination pagination = 2;
+}
+message PartnersResp {
+    repeated Relation relations = 1;
+    Pagination pagination = 2;
+    map<int64, UserWithOrgInfo> user_map = 3;
+}
+
+// =========================================== Dept
+message DepartmentEdit {
+    int64 id = 1;
+    int64 pid = 2;
+    int64 org_id = 3;
+    google.protobuf.StringValue name = 4;
+    google.protobuf.StringValue description = 5;
+    google.protobuf.StringValue remark = 6;
+    EntityStatus status = 7;
+}
+message Department {
+    int64 id = 1;
+    int64 pid = 2;
+    int64 org_id = 3;
+    string name = 4;
+    string description = 5;
+    string remark = 6;
+    EntityStatus status = 7;
+    int64 create_at = 8;
+    int64 update_at = 9;
+}
+message DeptsResp {
+    repeated Department data = 1;
+    Pagination pagination = 2;
+}

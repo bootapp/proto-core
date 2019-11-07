@@ -1,0 +1,43 @@
+syntax = "proto3";
+option java_package = "com.bootapp.core.grpc";
+import "core_common.proto";
+package core;
+service DalAuthService {
+    rpc ReadAuthorities(ReadAuthoritiesReq) returns (Authorities) {}
+
+    rpc CreateRoleUsers(UpdateRoleUsersReq) returns (Empty) {}
+    rpc ReadRoleUsers(ReadRoleUsersReq) returns(){}
+    rpc DeleteRoleUsers(AuthorizedIdsQueryReq) returns (Empty) {}
+}
+message RoleUsersResp {
+    repeated RoleUser data = 1;
+    map<string, Authority> auth_map = 2;
+}
+message RoleUser {
+    int64 id = 1;
+    int64 org_id = 2;
+    string name = 3;
+    string authorities = 4;
+}
+message ReadAuthoritiesReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    repeated string query_authority_groups = 3;
+}
+message Authorities {
+    repeated AuthorityGroup authority_groups = 1;
+    repeated Authority authorities = 2;
+}
+message Authority {
+    string group_auth_key = 1;
+    string auth_key = 2;
+    int64 auth_value = 3;
+    string name = 4;
+}
+
+message AuthorityGroup {
+    string group_auth_key = 1;
+    int64 group_auth_value = 2;
+    string name = 3;
+    int64 module_id = 4; //reserved
+}
