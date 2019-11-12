@@ -24,16 +24,16 @@ service DalUserService {
     rpc UpdateOrgs(OrgsReq) returns (Empty);
     rpc ReadOrgs(ReadOrgsReq) returns (OrgsResp);
     //--------------------------------------------------- user-org
- //   rpc CreateUserOrgs() returns (Empty);
+    rpc CreateUserOrgs(CreateUserOrgsReq) returns (Empty);
  //   rpc ReadUserOrgs() returns ();
-    rpc DeleteUserOrgs(AuthorizedIdsQueryReq) returns (Empty);
+    rpc DeleteUserOrgs(AuthorizedIdsReq) returns (Empty);
     // ========================================= dept
     rpc UpdateDepts(DeptsReq) returns (Empty);
     rpc ReadDepts(ReadDeptsReq) returns (DeptsResp);
     //--------------------------------------------------- relation
     rpc UpdateRelations(UpdateRelationsReq) returns (Empty);
     rpc ReadRelations(ReadRelationsReq) returns (RelationsResp);
-    rpc DeleteRelations(AuthorizedIdsQueryReq) returns (Empty);
+    rpc DeleteRelations(AuthorizedIdsReq) returns (Empty);
     // ---- extra
     rpc ReadPartners(ReadPartnersReq) returns (PartnersResp);
     rpc ReadPartnersIn(ReadPartnersInReq) returns (PartnersResp);
@@ -45,21 +45,27 @@ service DalUserService {
     rpc ReadInbox(ReadInboxReq) returns (MessageResp);
     rpc DeleteInbox(UpdateInboxReq) returns (Empty);
 }
+
+message UserOrg {
+    int64 id = 1;
+    int64 user_id = 2;
+    int64 org_id = 3;
+    int64 user_role_id = 4;
+    int64 create_at = 5;
+    int64 update_at = 6;
+}
+message CreateUserOrgsReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    repeated UserOrg data = 3;
+}
+
 enum UpdateUserType {
     UPDATE_USER_TYPE_NULL = 0;
     UPDATE_USER_TYPE_ID = 1;
     UPDATE_USER_TYPE_USERNAME = 2;
     UPDATE_USER_TYPE_PHONE = 3;
     UPDATE_USER_TYPE_EMAIL = 4;
-}
-message UserOrgEdit {
-    int64 user_id = 1;
-    int64 org_id = 2;
-}
-message CreateUserOrgsReq {
-    int64 user_id = 1;
-    int64 org_id = 2;
-    repeated UserOrgEdit data = 3;
 }
 message UserOrgsResp {
 

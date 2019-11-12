@@ -1,0 +1,100 @@
+syntax="proto3";
+package core;
+option java_package = "com.bootapp.core.grpc";
+import "google/api/annotations.proto";
+import "core_common.proto";
+
+service SrvCoreSysService {
+    // =============================================== AuthGroup
+    rpc InvokeUpdateAuthGroups(InvokeUpdateAuthGroupReq) returns (Empty) {
+        option (google.api.http) = {
+            post: "/rpc/sys/auth-groups"
+            body: "*"
+        };
+    }
+    rpc InvokeDeleteAuthGroup(IdReq) returns (Empty) {
+        option (google.api.http) = {
+            delete: "/rpc/sys/auth-groups/{id}"
+        };
+    }
+    rpc QueryAuthGroups(QueryAuthGroupReq) returns (AuthGroupsResp) {
+        option (google.api.http) = {
+            get: "/rpc/sys/auth-groups"
+        };
+    }
+    // =============================================== Authority
+    rpc InvokeNewAuthority(AuthorityEdit) returns (Empty) {
+        option (google.api.http) = {
+            post: "/rpc/sys/authorities"
+            body: "*"
+        };
+    }
+    rpc InvokeUpdateAuthority(AuthorityEdit) returns (Empty) {
+        option (google.api.http) = {
+            patch: "/rpc/sys/authorities"
+            body: "*"
+        };
+    }
+    rpc InvokeDeleteAuthority(InvokeDeleteAuthReq) returns (Empty) {
+        option (google.api.http) = {
+            delete: "/rpc/sys/authorities/{key}"
+        };
+    }
+    rpc QueryAuthority(QueryAuthReq) returns (AuthoritiesResp) {
+        option (google.api.http) = {
+            get: "/rpc/sys/authorities"
+        };
+    }
+    // =============================================== RoleOrg
+    rpc InvokeUpdateRoleOrgs(InvokeUpdateRoleOrgsReq) returns (Empty) {
+        option (google.api.http) = {
+            post: "/rpc/sys/role-orgs"
+            body: "*"
+        };
+    }
+    rpc InvokeDeleteRoleOrg(IdReq) returns (Empty) {
+        option (google.api.http) = {
+            delete: "/rpc/sys/role-orgs/{id}"
+        };
+    }
+    rpc QueryRoleOrgs(PaginationReq) returns (RoleOrgsResp) {
+        option (google.api.http) = {
+            get: "/rpc/sys/role-orgs"
+        };
+    }
+    // =============================================== RoleUsers
+    rpc InvokeUpdateRoleUsers(InvokeUpdateRoleUsersReq) returns (Empty) {
+        option (google.api.http) = {
+            post: "/rpc/auth/role-users"
+            body: "*"
+        };
+    }
+    rpc InvokeDeleteRoleUser(IdReq) returns (Empty) {
+        option (google.api.http) = {
+            delete: "/rpc/auth/role-users/{id}"
+        };
+    }
+    rpc QueryRoleUsers(PaginationReq) returns (RoleUsersResp) {
+        option (google.api.http) = {
+            get: "/rpc/auth/role-users"
+        };
+    }
+}
+message InvokeUpdateAuthGroupReq {
+    repeated AuthGroupEdit data = 1;
+}
+message QueryAuthGroupReq {
+    int64 pid = 1;
+}
+message InvokeDeleteAuthReq {
+    string key = 1;
+}
+message QueryAuthReq {
+    int64 group_id = 1;
+}
+message InvokeUpdateRoleOrgsReq {
+    repeated RoleOrgEdit data = 1;
+}
+message InvokeUpdateRoleUsersReq {
+    repeated RoleUserEdit data = 1;
+}

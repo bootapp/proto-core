@@ -47,40 +47,43 @@ message Pagination {
     int64 total = 4;
 
 }
+message PaginationReq {
+    Pagination pagination = 1;
+}
 message AuthorizedPaginationReq {
     int64 user_id = 1;
     int64 org_id = 2;
     Pagination pagination = 3;
 }
-message IdQueryReq {
+message IdReq {
     int64 id = 1;
 }
-message AuthorizedIdQueryReq {
+message IdsReq {
+    repeated int64 ids = 1;
+}
+message AuthorizedIdReq {
     int64 id = 1;
     int64 user_id = 2;
     int64 org_id = 3;
 }
-message PaginatedIdQueryReq {
+message PaginatedIdReq {
     int64 id = 1;
     Pagination pagination = 2;
 }
-message PaginatedIdsQueryReq {
+message PaginatedIdsReq {
     repeated int64 ids = 1;
     Pagination pagination = 2;
 }
-message IdsQueryReq {
-    repeated int64 ids = 1;
-}
-message AuthorizedIdsQueryReq {
+message AuthorizedIdsReq {
     repeated int64 ids = 1;
     int64 user_id = 2;
     int64 org_id = 3;
 }
-message StringQueryReq {
+message StringReq {
     string query = 1;
     Pagination pagination = 2;
 }
-message AuthorizedStringQueryReq {
+message AuthorizedStringReq {
     string query = 1;
     int64 user_id = 2;
     int64 org_id = 3;
@@ -91,7 +94,75 @@ message Empty {}
 message StringsResp {
     repeated string data = 1;
 }
-
+// =========================================== Auth
+message Authority {
+    string key = 1;
+    int64 group_id = 2;
+    int64 value = 3;
+    string name = 4;
+}
+message AuthorityEdit {
+    string key = 1;
+    int64 group_id = 2;
+    google.protobuf.Int64Value value = 3;
+    string name = 4;
+}
+message AuthoritiesResp {
+    repeated Authority data = 1;
+}
+message AuthGroup {
+    int64 id = 1;
+    int64 pid = 2;
+    int64 value = 3;
+    string name = 4;
+}
+message AuthGroupEdit {
+    int64 id = 1;
+    google.protobuf.Int64Value pid = 2;
+    google.protobuf.Int64Value value = 3;
+    string name = 4;
+}
+message AuthGroupsResp {
+    repeated AuthGroup data = 1;
+}
+// =========================================== RoleOrg
+message RoleOrg {
+    int64 id = 1;
+    string name = 2;
+    string remark = 3;
+    string authorities = 4;
+}
+message RoleOrgEdit {
+    int64 id = 1;
+    google.protobuf.StringValue name = 2;
+    google.protobuf.StringValue remark = 3;
+    google.protobuf.StringValue authorities = 4;
+}
+message RoleOrgsResp {
+    repeated RoleOrg data = 1;
+    Pagination pagination = 2;
+    map<int64, AuthGroup> auth_group_map = 3;
+}
+// =========================================== RoleUser
+message RoleUser {
+    int64 id = 1;
+    int64 org_id = 2;
+    string name = 3;
+    string remark = 4;
+    string authorities = 5;
+}
+message RoleUserEdit {
+    int64 id = 1;
+    google.protobuf.Int64Value org_id = 2;
+    google.protobuf.StringValue name = 3;
+    google.protobuf.StringValue remark = 4;
+    google.protobuf.StringValue authorities = 5;
+}
+message RoleUsersResp {
+    repeated RoleUser data = 1;
+    Pagination pagination = 2;
+    map<string, Authority> auth_map = 3;
+}
 // =========================================== User
 message User {
     int64 id = 1;
