@@ -47,6 +47,10 @@ message Pagination {
     int64 total = 4;
 
 }
+message AuthorizedReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+}
 message PaginationReq {
     Pagination pagination = 1;
 }
