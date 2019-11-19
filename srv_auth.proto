@@ -14,7 +14,7 @@ service SrvCoreSysService {
     }
     rpc InvokeDeleteAuthGroup(IdReq) returns (Empty) {
         option (google.api.http) = {
-            delete: "/rpc/sys/auth-groups/{id}"
+            delete: "/rpc/sys/auth-groups"
         };
     }
     rpc QueryAuthGroups(QueryAuthGroupReq) returns (AuthGroupsResp) {
@@ -37,7 +37,7 @@ service SrvCoreSysService {
     }
     rpc InvokeDeleteAuthority(InvokeDeleteAuthReq) returns (Empty) {
         option (google.api.http) = {
-            delete: "/rpc/sys/authorities/{key}"
+            delete: "/rpc/sys/authorities"
         };
     }
     rpc QueryAuthority(QueryAuthReq) returns (AuthoritiesResp) {
@@ -54,7 +54,7 @@ service SrvCoreSysService {
     }
     rpc InvokeDeleteRoleOrg(IdReq) returns (Empty) {
         option (google.api.http) = {
-            delete: "/rpc/sys/role-orgs/{id}"
+            delete: "/rpc/sys/role-orgs"
         };
     }
     rpc QueryRoleOrgs(PaginationReq) returns (RoleOrgsResp) {
@@ -71,7 +71,7 @@ service SrvCoreSysService {
     }
     rpc InvokeDeleteRoleUser(IdReq) returns (Empty) {
         option (google.api.http) = {
-            delete: "/rpc/auth/role-users/{id}"
+            delete: "/rpc/auth/role-users"
         };
     }
     rpc QueryRoleUsers(PaginationReq) returns (RoleUsersResp) {

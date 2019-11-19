@@ -113,14 +113,12 @@ message AuthoritiesResp {
 message AuthGroup {
     int64 id = 1;
     int64 pid = 2;
-    int64 value = 3;
-    string name = 4;
+    string name = 3;
 }
 message AuthGroupEdit {
     int64 id = 1;
     google.protobuf.Int64Value pid = 2;
-    google.protobuf.Int64Value value = 3;
-    string name = 4;
+    string name = 3;
 }
 message AuthGroupsResp {
     repeated AuthGroup data = 1;
