@@ -14,6 +14,7 @@ enum EntityStatus {
     ENTITY_STATUS_SUBMITTED = 5;
     ENTITY_STATUS_PROCESSING = 6;
     ENTITY_STATUS_DONE = 7;
+    ENTITY_STATUS_REJECTED = 8;
 }
 enum Language {
     LANG_NULL = 0;
