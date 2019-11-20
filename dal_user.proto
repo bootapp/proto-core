@@ -10,6 +10,8 @@ service DalUserService {
     rpc CreateUser(CreateUserReq) returns (UserWithOrgAuth);
     //--- Create users
     rpc CreateUsers(CreateUsersReq) returns (UsersResp);
+    //--- Create users and automatically create new orgs
+    rpc CreateUsersWithNewOrg(CreateUsersReq) returns (UsersResp);
     //--- Update a User
     rpc UpdateUser(UpdateUserReq) returns (Empty);
     //--- Read a single user with auth
