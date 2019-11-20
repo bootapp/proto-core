@@ -24,7 +24,8 @@ service DalUserService {
     rpc UpdateOrgs(OrgsReq) returns (Empty);
     rpc ReadOrgs(ReadOrgsReq) returns (OrgsResp);
     //--------------------------------------------------- user-org
-    rpc CreateUserOrgs(CreateUserOrgsReq) returns (Empty);
+    rpc UpdateUserOrgs(CreateUserOrgsReq) returns (Empty);
+    rpc ReadUserOrgs(AuthorizedReq) returns (UserOrgsResp);
     rpc DeleteUserOrgs(AuthorizedIdsReq) returns (Empty);
     // ========================================= dept
     rpc UpdateDepts(DeptsReq) returns (Empty);
@@ -67,7 +68,7 @@ enum UpdateUserType {
     UPDATE_USER_TYPE_EMAIL = 4;
 }
 message UserOrgsResp {
-
+    repeated UserOrg data = 1;
 }
 // =========================================== Dept
 message DeptsReq {
