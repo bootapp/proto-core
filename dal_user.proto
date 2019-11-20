@@ -27,6 +27,7 @@ service DalUserService {
     rpc UpdateUserOrgs(CreateUserOrgsReq) returns (Empty);
     rpc ReadUserOrgs(AuthorizedReq) returns (UserOrgsResp);
     rpc DeleteUserOrgs(AuthorizedIdsReq) returns (Empty);
+    rpc CreateOrgAndUserOrg(CreateOrgUserOrgReq) returns (Empty) {}
     // ========================================= dept
     rpc UpdateDepts(DeptsReq) returns (Empty);
     rpc ReadDepts(ReadDeptsReq) returns (DeptsResp);
@@ -45,7 +46,12 @@ service DalUserService {
     rpc ReadInbox(ReadInboxReq) returns (MessageResp);
     rpc DeleteInbox(UpdateInboxReq) returns (Empty);
 }
-
+message CreateOrgUserOrgReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    int64 user_role_id = 3;
+    OrganizationEdit org = 4;
+}
 message UserOrg {
     int64 id = 1;
     int64 user_id = 2;
