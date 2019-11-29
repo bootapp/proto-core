@@ -1,0 +1,42 @@
+syntax="proto3";
+import "google/api/annotations.proto";
+option java_package = "com.bootapp.core.grpc";
+package core;
+service SrvDataStoreService {
+    rpc QueryUploadToken(UploadTokenReq) returns (UploadTokenResp) {
+        option (google.api.http) = {
+            get: "/rpc/data-store/oss/upload-token"
+        };
+    }
+    rpc InvokeUploadCallback(OSSCallbackReq) returns (OSSCallbackResp) {
+        option (google.api.http) = {
+            post: "/rpc/data-store/oss/callback"
+            body: "*"
+        };
+    }
+}
+enum FileDirType {
+    FILE_TYPE_NULL = 0;
+    FILE_TYPE_BUSINESS_LICENSE = 1;
+}
+message UploadTokenReq {
+    FileDirType type = 1;
+}
+message UploadTokenResp {
+    OSSPolicyToken token = 1;
+}
+message OSSPolicyToken {
+    string key = 1;
+    string host = 2;
+    int64 expire = 3;
+    string signature = 4;
+    string policy = 5;
+    string dir = 6;
+    string callback = 7;
+}
+message OSSCallbackReq {
+    string public_key_URL = 1;
+}
+message OSSCallbackResp {
+    string Status = 1;
+}
