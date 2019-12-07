@@ -14,6 +14,7 @@ service SrvDataStoreService {
             body: "*"
         };
     }
+    rpc QueryFileAccessToken(ReqFileUrl) returns (ReqFileUrl) {}
 }
 enum FileDirType {
     FILE_TYPE_NULL = 0;
@@ -39,4 +40,7 @@ message OSSCallbackReq {
 }
 message OSSCallbackResp {
     string Status = 1;
+}
+message ReqFileUrl {
+    string url = 1;
 }
