@@ -44,7 +44,8 @@ enum SortType {
 enum InfoType {
     INFO_TYPE_NULL = 0;
     INFO_TYPE_BRIEF = 1;
-    INFO_TYPE_DETAIL = 2;
+    INFO_TYPE_EXTENT = 2;
+    INFO_TYPE_DETAIL = 3;
 }
 message Pagination {
     int64 idx = 1; // = page or offset according to specific method
