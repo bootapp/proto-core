@@ -1,7 +1,7 @@
 syntax = "proto3";
 option java_package = "com.bootapp.core.grpc";
 import "core_common.proto";
-package core;
+package proto;
 service DalAuthService {
     // ------------------- Authority
     rpc CreateAuthorities(AuthoritiesReq) returns (Empty) {}

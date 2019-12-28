@@ -1,6 +1,6 @@
 syntax = "proto3";
 option java_package = "com.bootapp.core.grpc";
-package core;
+package proto;
 service DalSysAuthService {
     rpc ReadSysAuthorities(ReadSysAuthoritiesReq) returns (SysAuthorities) {}
 }

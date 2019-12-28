@@ -1,7 +1,7 @@
 syntax = "proto3";
 option java_package = "com.bootapp.core.grpc";
 import "core_common.proto";
-package core;
+package proto;
 
 // add credential to prevent evil usage
 service DalUserService {
@@ -22,6 +22,10 @@ service DalUserService {
     rpc ReadUsersIn(ReadUsersInReq) returns (UsersResp);
     //-------- others
     rpc VerifyUniqueUser(User) returns (Empty);
+    //--------------------------------------------------- dictionary
+    rpc UpdateDictItems(DictItemsReq) returns (Empty);
+    rpc ReadDictItems(ReadDictItemsReq) returns (DictItemList);
+    rpc DeleteDictItems(AuthorizedIdsReq) returns (Empty);
     //--------------------------------------------------- org
     rpc UpdateOrgs(OrgsReq) returns (Empty);
     rpc ReadOrgs(ReadOrgsReq) returns (OrgsResp);
@@ -40,13 +44,37 @@ service DalUserService {
     // ---- extra
     rpc ReadPartners(ReadPartnersReq) returns (PartnersResp);
     rpc ReadPartnersIn(ReadPartnersInReq) returns (PartnersResp);
+    //--------------------------------------------------- simple relation
+    rpc CreateSimpleRelation(SimpleRelationReq) returns (Empty) {}
+    rpc DeleteSimpleRelation(SimpleRelationReq) returns (Empty) {}
+    rpc ReadSimpleRelations(SimpleRelationReq) returns (SimpleRelationList) {}
     //--------------------------------------------------- message
     rpc ReadMessages(ReadMessagesReq) returns(MessageResp);
     rpc UpdateMessages(MessagesReq) returns (Empty);
-    rpc DistributeMessages(Empty) returns (Empty);
-    //----------- message receives
-    rpc ReadInbox(ReadInboxReq) returns (MessageResp);
+    rpc UpdateInbox(UpdateInboxReq) returns (Empty);
     rpc DeleteInbox(UpdateInboxReq) returns (Empty);
+    rpc DistributeOrgMessages(Empty) returns (Empty);
+}
+// =========================================== DictItems
+message DictItemsReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    repeated DictItemEdit data = 3;
+}
+message ReadDictItemsReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    repeated int64 ids = 3;
+    int64 pid = 4;
+    Pagination pagination = 5;
+}
+message SimpleRelationReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    RelationType type = 3;
+    int64 to_id = 4;
+    int64 query_user_id = 5;
+    Pagination pagination = 100;
 }
 message CreateOrgUserOrgReq {
     int64 user_id = 1;
@@ -67,7 +95,6 @@ message CreateUserOrgsReq {
     int64 org_id = 2;
     repeated UserOrg data = 3;
 }
-
 enum UpdateUserType {
     UPDATE_USER_TYPE_NULL = 0;
     UPDATE_USER_TYPE_ID = 1;
@@ -192,17 +219,21 @@ message MessagesReq {
 message ReadMessagesReq {
     int64 org_id = 1;
     int64 user_id = 2;
-    Message message = 3;
-    Pagination pagination = 4;
+    int64 from_user_id = 3;
+    int64 to_user_id = 4;
+    string title = 5;
+    string content = 6;
+    MessageType type = 7;
+    ReceiveType receive_type = 8;
+    EntityStatus status = 9;
+    Pagination pagination = 100;
 }
-
 message UpdateInboxReq {
     int64 org_id = 1;
     int64 user_id = 2;
     repeated int64 ids = 3;
     EntityStatus status = 4;
 }
-
 message ReadInboxReq {
     int64 org_id = 1;
     int64 user_id = 2;

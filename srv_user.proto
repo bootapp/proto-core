@@ -1,9 +1,9 @@
 syntax="proto3";
-package core;
 option java_package = "com.bootapp.core.grpc";
 import "google/api/annotations.proto";
 import "core_common.proto";
 
+package proto;
 service SrvCoreUserService {
     // =============================================== users
     rpc Register(RegisterReq) returns (UserWithOrgAuth) {
@@ -53,16 +53,17 @@ service SrvCoreUserService {
             get: "/rpc/admin/users"
         };
     }
-}
-
-enum RegisterType {
-    REGISTER_TYPE_NULL = 0;
-    REGISTER_TYPE_USERNAME_PASS = 1;
-    REGISTER_TYPE_PHONE_PASS = 2;
-    REGISTER_TYPE_EMAIL_PASS = 3;
-    REGISTER_TYPE_PHONE_CODE = 4;
-    REGISTER_TYPE_PHONE_PASS_CODE = 5;
-    REGISTER_TYPE_CIPHER = 6;
+    rpc AdminInvokeUpdateDictItem(InvokeUpdateDictReq) returns (Empty) {
+        option (google.api.http) = {
+            post: "/rpc/admin/dictionary"
+        };
+    }
+    // =============================================== dictTree
+    rpc QueryDictTree(QueryDictTreeReq) returns (DictItemList) {
+        option (google.api.http) = {
+            get: "/rpc/dictionary"
+        };
+    }
 }
 enum LoginType {
     LOGIN_TYPE_NULL = 0;
@@ -85,6 +86,7 @@ message RegisterReq {
     string    code = 4;
     string    referral_code = 5;
 }
+
 message LoginReq {
     LoginType type = 1;
     string      key = 2;
@@ -102,4 +104,14 @@ message ResetPasswordReq {
 message QueryUsersReq {
     User user = 1;
     Pagination pagination = 2;
+}
+
+message QueryDictTreeReq {
+    int64 pid = 1;
+    repeated int64 ids = 2;
+    Pagination pagination = 3;
+}
+
+message InvokeUpdateDictReq {
+    DictItemEdit item = 1;
 }

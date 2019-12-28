@@ -1,9 +1,8 @@
 syntax="proto3";
-package core;
 option java_package = "com.bootapp.core.grpc";
 import "google/api/annotations.proto";
 import "core_common.proto";
-
+package proto;
 service SrvCoreSysService {
     // =============================================== AuthGroup
     rpc InvokeUpdateAuthGroups(InvokeUpdateAuthGroupReq) returns (Empty) {

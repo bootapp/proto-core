@@ -2,7 +2,7 @@ syntax="proto3";
 import "google/api/annotations.proto";
 import "core_common.proto";
 option java_package = "com.bootapp.core.grpc";
-package core;
+package proto;
 service SrvSecurityService {
     rpc SendPhoneCode(SmsReq) returns (Empty) {
         option (google.api.http) = {

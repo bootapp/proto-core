@@ -1,9 +1,18 @@
 syntax="proto3";
 option java_package = "com.bootapp.core.grpc";
 import "google/protobuf/wrappers.proto";
-package core;
+package proto;
 
 //===================================== Common Types
+enum RegisterType {
+    REGISTER_TYPE_NULL = 0;
+    REGISTER_TYPE_USERNAME_PASS = 1;
+    REGISTER_TYPE_PHONE_PASS = 2;
+    REGISTER_TYPE_EMAIL_PASS = 3;
+    REGISTER_TYPE_PHONE_CODE = 4;
+    REGISTER_TYPE_PHONE_PASS_CODE = 5;
+    REGISTER_TYPE_CIPHER = 6;
+}
 enum EntityStatus {
     ENTITY_STATUS_NULL = 0;
     ENTITY_STATUS_NORMAL = 1;
@@ -264,6 +273,9 @@ enum RelationType {
     RELATION_NULL = 0;
     RELATION_ORG_USER_PARTNER_SUPPLIER = 1;
     RELATION_ORG_USER_PARTNER_LOGISTICS = 2;
+    RELATION_SIMPLE_USER_FOLLOW = 100;
+    RELATION_SIMPLE_USER_VISIT = 101;
+    RELATION_SIMPLE_USER_BLACKLIST = 102;
 }
 message Relation {
     int64 id = 1;
@@ -287,7 +299,16 @@ message PartnersResp {
     Pagination pagination = 2;
     map<int64, UserWithOrgInfo> user_map = 3;
 }
-
+message SimpleRelation {
+    int64 id = 1;
+    int64 from_id = 2;
+    int64 to_id = 3;
+    int64 updated_at = 4;
+}
+message SimpleRelationList {
+    repeated SimpleRelation data = 1;
+    Pagination pagination = 2;
+}
 // =========================================== Dept
 message DepartmentEdit {
     int64 id = 1;
@@ -311,5 +332,32 @@ message Department {
 }
 message DeptsResp {
     repeated Department data = 1;
+    Pagination pagination = 2;
+}
+// =========================================== DictItems
+message DictItemEdit {
+    int64 id = 1;
+    int64 pid = 2;
+    int64 seq = 3;
+    google.protobuf.StringValue name = 4;
+    google.protobuf.StringValue code = 5;
+    google.protobuf.StringValue description = 6;
+    google.protobuf.StringValue content = 7;
+    google.protobuf.StringValue remark = 8;
+}
+message DictItem {
+    int64 id = 1;
+    int64 pid = 2;
+    int64 seq = 3;
+    string name = 4;
+    string code = 5;
+    string description = 6;
+    string content = 7;
+    string remark = 8;
+    int64 created_at = 9;
+    int64 updated_at = 10;
+}
+message DictItemList {
+    repeated DictItem data = 1;
     Pagination pagination = 2;
 }
