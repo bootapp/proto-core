@@ -1,6 +1,6 @@
 syntax="proto3";
 import "google/api/annotations.proto";
-option java_package = "com.bootapp.core.grpc";
+option java_package = "com.bootapp.grpc.core";
 package proto;
 service SrvDataStoreService {
     rpc QueryUploadToken(UploadTokenReq) returns (UploadTokenResp) {
@@ -19,6 +19,8 @@ service SrvDataStoreService {
 enum FileDirType {
     FILE_TYPE_NULL = 0;
     FILE_TYPE_BUSINESS_LICENSE = 1;
+    FILE_TYPE_USER_PROFILE = 2;
+    FILE_TYPE_INSTITUTE_LOGO = 3;
 }
 message UploadTokenReq {
     FileDirType type = 1;

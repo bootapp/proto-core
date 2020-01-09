@@ -1,5 +1,5 @@
 syntax = "proto3";
-option java_package = "com.bootapp.core.grpc";
+option java_package = "com.bootapp.grpc.core";
 import "core_common.proto";
 package proto;
 
@@ -22,6 +22,7 @@ service DalUserService {
     rpc ReadUsersIn(ReadUsersInReq) returns (UsersResp);
     //-------- others
     rpc VerifyUniqueUser(User) returns (Empty);
+    rpc ReadUserIds(AuthorizedPaginationReq) returns (IdsResp);
     //--------------------------------------------------- dictionary
     rpc UpdateDictItems(DictItemsReq) returns (Empty);
     rpc ReadDictItems(ReadDictItemsReq) returns (DictItemList);
@@ -37,23 +38,46 @@ service DalUserService {
     // ========================================= dept
     rpc UpdateDepts(DeptsReq) returns (Empty);
     rpc ReadDepts(ReadDeptsReq) returns (DeptsResp);
-    //--------------------------------------------------- relation
+    // --------------------------------------------------- relation
     rpc UpdateRelations(UpdateRelationsReq) returns (Empty);
     rpc ReadRelations(ReadRelationsReq) returns (RelationsResp);
     rpc DeleteRelations(AuthorizedIdsReq) returns (Empty);
     // ---- extra
     rpc ReadPartners(ReadPartnersReq) returns (PartnersResp);
     rpc ReadPartnersIn(ReadPartnersInReq) returns (PartnersResp);
-    //--------------------------------------------------- simple relation
-    rpc CreateSimpleRelation(SimpleRelationReq) returns (Empty) {}
-    rpc DeleteSimpleRelation(SimpleRelationReq) returns (Empty) {}
-    rpc ReadSimpleRelations(SimpleRelationReq) returns (SimpleRelationList) {}
-    //--------------------------------------------------- message
-    rpc ReadMessages(ReadMessagesReq) returns(MessageResp);
-    rpc UpdateMessages(MessagesReq) returns (Empty);
+    // --------------------------------------------------- message
+    rpc UpdateMessage(MessageReq) returns (Empty);
+    rpc ReadMessages(ReadMessagesReq) returns(MessageList);
+    // ---- inbox
+    rpc CreateInbox(CreateInboxReq) returns (Empty);
     rpc UpdateInbox(UpdateInboxReq) returns (Empty);
     rpc DeleteInbox(UpdateInboxReq) returns (Empty);
-    rpc DistributeOrgMessages(Empty) returns (Empty);
+    rpc ReadInbox(ReadInboxReq) returns (MessageList);
+    // --------------------------------------------------- feedback
+    rpc UpdateFeedback(FeedbackReq) returns (Empty);
+    rpc ReadFeedback(ReadFeedbackReq) returns (FeedbackList);
+}
+message IdsResp {
+    repeated int64 ids = 1;
+    Pagination pagination = 10;
+}
+message CreateInboxReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    int64 msg_id = 3;
+    repeated int64 to_user_ids = 4;
+}
+// =========================================== Feedback
+message FeedbackReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    FeedbackEdit item = 3;
+}
+message ReadFeedbackReq {
+    int64 user_id = 1;
+    int64 org_id = 2;
+    EntityStatus status = 3;
+    Pagination pagination = 10;
 }
 // =========================================== DictItems
 message DictItemsReq {
@@ -66,15 +90,8 @@ message ReadDictItemsReq {
     int64 org_id = 2;
     repeated int64 ids = 3;
     int64 pid = 4;
-    Pagination pagination = 5;
-}
-message SimpleRelationReq {
-    int64 user_id = 1;
-    int64 org_id = 2;
-    RelationType type = 3;
-    int64 to_id = 4;
-    int64 query_user_id = 5;
-    Pagination pagination = 100;
+    EntityStatus status = 5;
+    Pagination pagination = 10;
 }
 message CreateOrgUserOrgReq {
     int64 user_id = 1;
@@ -211,10 +228,10 @@ message ReadPartnersInReq {
     repeated int64 partner_ids = 3;
 }
 // =========================================== Message
-message MessagesReq {
+message MessageReq {
     int64 org_id = 1;
     int64 user_id = 2;
-    repeated Message data = 3;
+    MessageEdit msg = 3;
 }
 message ReadMessagesReq {
     int64 org_id = 1;
@@ -239,4 +256,6 @@ message ReadInboxReq {
     int64 user_id = 2;
     EntityStatus status = 3;
     int64 update_at = 4;
+    Pagination pagination = 5;
+    int64 query_user_id = 6;
 }

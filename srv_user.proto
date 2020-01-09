@@ -1,20 +1,26 @@
 syntax="proto3";
-option java_package = "com.bootapp.core.grpc";
+option java_package = "com.bootapp.grpc.core";
 import "google/api/annotations.proto";
 import "core_common.proto";
 
 package proto;
 service SrvCoreUserService {
     // =============================================== users
-    rpc Register(RegisterReq) returns (UserWithOrgAuth) {
+    rpc Register(RegisterReq) returns (LoginResp) {
         option (google.api.http) = {
             post: "/rpc/auth/register"
             body: "*"
         };
     }
-    rpc Login(LoginReq) returns (UserWithOrgAuth) {
+    rpc Login(LoginReq) returns (LoginResp) {
         option (google.api.http) = {
             post: "/rpc/auth/login"
+            body: "*"
+        };
+    }
+    rpc Refresh(RefreshReq) returns (RefreshResp) {
+        option (google.api.http) = {
+            post: "/rpc/auth/refresh"
             body: "*"
         };
     }
@@ -55,7 +61,13 @@ service SrvCoreUserService {
     }
     rpc AdminInvokeUpdateDictItem(InvokeUpdateDictReq) returns (Empty) {
         option (google.api.http) = {
-            post: "/rpc/admin/dictionary"
+            post: "/rpc/dictionary"
+            body: "*"
+        };
+    }
+    rpc AdminInvokeDeleteDictItem(IdReq) returns (Empty) {
+        option (google.api.http) = {
+            delete: "/rpc/dictionary/{id}"
         };
     }
     // =============================================== dictTree
@@ -64,6 +76,52 @@ service SrvCoreUserService {
             get: "/rpc/dictionary"
         };
     }
+    // =============================================== feedback
+    rpc InvokeUpdateFeedback(FeedbackEdit) returns (Empty) {
+        option (google.api.http) = {
+            post: "/rpc/feedback"
+            body: "*"
+        };
+    }
+    rpc QueryFeedback(QueryFeedbackReq) returns (FeedbackList) {
+        option (google.api.http) = {
+            get: "/rpc/feedback"
+        };
+    }
+    // =============================================== messages
+    rpc InvokeNewMessage(MessageEdit) returns (Empty) {
+        option (google.api.http) = {
+            post: "/rpc/messages"
+            body: "*"
+        };
+    }
+    rpc QueryMessages(QueryMessagesReq) returns (MessageList) {
+        option (google.api.http) = {
+            get: "/rpc/messages"
+        };
+    }
+    rpc QueryInbox(PaginationReq) returns (MessageList) {
+        option (google.api.http) = {
+            get: "/rpc/inbox"
+        };
+    }
+    rpc DeleteInbox(StringReq) returns (Empty) {
+        option (google.api.http) = {
+            delete: "/rpc/inbox"
+        };
+    }
+    rpc InvokeSetReadInbox(IdReq) returns (Empty) {
+        option (google.api.http) = {
+            get: "/rpc/inbox/{id}/read"
+        };
+    }
+}
+message QueryMessagesReq {
+    Pagination pagination = 1;
+}
+message QueryFeedbackReq {
+    EntityStatus status = 1;
+    Pagination pagination = 10;
 }
 enum LoginType {
     LOGIN_TYPE_NULL = 0;
@@ -78,7 +136,12 @@ enum ResetPasswordType {
     RESET_PASS_TYPE_NULL = 0;
     RESET_PASS_TYPE_PHONE_CODE = 1;
 }
-
+message LoginResp {
+    User user = 1;
+    repeated OrgWithAuthorities org_info = 2;
+    string access_token = 3;
+    string refresh_token = 4;
+}
 message RegisterReq {
     RegisterType type = 1;
     string    key = 2;
@@ -86,7 +149,13 @@ message RegisterReq {
     string    code = 4;
     string    referral_code = 5;
 }
-
+message RefreshReq {
+    string refresh_token = 1;
+}
+message RefreshResp {
+    string access_token = 1;
+    string refresh_token = 2;
+}
 message LoginReq {
     LoginType type = 1;
     string      key = 2;
@@ -109,7 +178,8 @@ message QueryUsersReq {
 message QueryDictTreeReq {
     int64 pid = 1;
     repeated int64 ids = 2;
-    Pagination pagination = 3;
+    EntityStatus status = 3;
+    Pagination pagination = 10;
 }
 
 message InvokeUpdateDictReq {

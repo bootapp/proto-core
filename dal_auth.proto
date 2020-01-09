@@ -1,5 +1,5 @@
 syntax = "proto3";
-option java_package = "com.bootapp.core.grpc";
+option java_package = "com.bootapp.grpc.core";
 import "core_common.proto";
 package proto;
 service DalAuthService {
