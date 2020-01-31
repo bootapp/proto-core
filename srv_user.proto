@@ -52,13 +52,12 @@ service SrvCoreUserService {
             get: "/rpc/users"
         };
     }
-
-    // =============================================== admin APIs
-    rpc AdminQueryUsers(QueryUsersReq) returns (UsersResp) {
+    rpc UpdateUser(UserEdit) returns (Empty) {
         option (google.api.http) = {
-            get: "/rpc/admin/users"
+            post: "/rpc/users/{id}"
         };
     }
+    // =============================================== dictItem
     rpc AdminInvokeUpdateDictItem(InvokeUpdateDictReq) returns (Empty) {
         option (google.api.http) = {
             post: "/rpc/dictionary"
@@ -171,8 +170,11 @@ message ResetPasswordReq {
 }
 
 message QueryUsersReq {
-    User user = 1;
-    Pagination pagination = 2;
+    string phone = 1;
+    string username = 2;
+    string email = 3;
+    EntityStatus status = 4;
+    Pagination pagination = 10;
 }
 
 message QueryDictTreeReq {

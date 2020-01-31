@@ -21,6 +21,7 @@ enum FileDirType {
     FILE_TYPE_BUSINESS_LICENSE = 1;
     FILE_TYPE_USER_PROFILE = 2;
     FILE_TYPE_INSTITUTE_LOGO = 3;
+    FILE_TYPE_TIMETABLE = 4;
 }
 message UploadTokenReq {
     FileDirType type = 1;

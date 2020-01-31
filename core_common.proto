@@ -24,6 +24,8 @@ enum EntityStatus {
     ENTITY_STATUS_PROCESSING = 6;
     ENTITY_STATUS_DONE = 7;
     ENTITY_STATUS_REJECTED = 8;
+
+    ENTITY_STATUS_FROZEN = 9;
 }
 enum Language {
     LANG_NULL = 0;
@@ -182,7 +184,7 @@ message RoleUsersResp {
     map<string, Authority> auth_map = 3;
 }
 // =========================================== User
-message User {
+message UserEdit {
     int64 id = 1;
     int64 org_id = 2;
     EntityStatus status = 3;
@@ -190,9 +192,22 @@ message User {
     google.protobuf.StringValue email = 5;
     google.protobuf.StringValue username = 6;
     google.protobuf.StringValue password = 7;
-    google.protobuf.StringValue name = 8;
-    int64 created_at = 9;
-    int64 updated_at = 10;
+    google.protobuf.Int32Value reg_ip = 9;
+    google.protobuf.Int64Value last_login_time = 10;
+    google.protobuf.Int32Value last_login_ip = 11;
+}
+message User {
+    int64 id = 1;
+    int64 org_id = 2;
+    EntityStatus status = 3;
+    string phone = 4;
+    string email = 5;
+    string username = 6;
+    int64 created_at = 7;
+    int64 updated_at = 8;
+    int32 reg_ip = 9;
+    int64 last_login_time = 10;
+    int32 last_login_ip = 11;
 }
 message OrgWithAuthorities {
     int64 id = 1;
@@ -374,6 +389,7 @@ message Feedback {
     EntityStatus status = 7;
     int64 created_at = 8;
     int64 updated_at = 9;
+    string reply = 10;
 }
 message FeedbackEdit {
     int64 id = 1;
@@ -383,6 +399,7 @@ message FeedbackEdit {
     google.protobuf.StringValue content = 5;
     google.protobuf.StringValue img_urls = 6;
     EntityStatus status = 7;
+    google.protobuf.StringValue reply = 8;
 }
 message FeedbackList {
     repeated Feedback data = 1;
